@@ -10,7 +10,8 @@ BUILD_LDFLAGS := "\
 	  -X main.version=$(VERSION) \
 	  -X main.gitcommit=$(CURRENT_REVISION) \
 	  -X github.com/mackerelio/mackerel-agent/config.agentName=$(MACKEREL_AGENT_NAME) \
-	  -X github.com/mackerelio/mackerel-agent/config.apibase=$(MACKEREL_API_BASE)"
+	  -X github.com/mackerelio/mackerel-agent/config.apibase=$(MACKEREL_API_BASE) \
+	  -s -w"
 
 .PHONY: all
 all: clean test build
