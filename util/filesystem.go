@@ -42,20 +42,7 @@ var dfHeaderPattern = regexp.MustCompile(
 
 var logger = logging.GetLogger("util.filesystem")
 
-var dfOpt = "-Pkl"
-
-func init() {
-	// Some `df` command such as busybox does not have `-P` or `-l` option.
-	tio := &timeout.Timeout{
-		Cmd:       exec.Command("df", dfOpt),
-		Duration:  3 * time.Second,
-		KillAfter: 1 * time.Second,
-	}
-	exitSt, _, stderr, err := tio.Run()
-	if err == nil && exitSt.Code != 0 && (strings.Contains(stderr, "df: invalid option -- ") || strings.Contains(stderr, "df: unrecognized option: ")) {
-		dfOpt = "-k"
-	}
-}
+var dfOpt = "-k"
 
 // CollectDfValues collects disk free statistics from df command
 func CollectDfValues() ([]*DfStat, error) {
