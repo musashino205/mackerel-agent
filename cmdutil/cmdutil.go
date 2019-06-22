@@ -56,9 +56,6 @@ func RunCommandArgs(cmdArgs []string, opt CommandOption) (stdout, stderr string,
 // RunCommandArgsContext runs command by args with context
 func RunCommandArgsContext(ctx context.Context, cmdArgs []string, opt CommandOption) (stdout, stderr string, exitCode int, err error) {
 	args := append([]string{}, cmdArgs...)
-	if opt.User != "" {
-		args = append([]string{"sudo", "-Eu", opt.User}, args...)
-	}
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Env = append(os.Environ(), opt.Env...)
 	outbuf := &bytes.Buffer{}
