@@ -6,8 +6,6 @@ import (
 	"errors"
 	"os"
 	"os/exec"
-	"runtime"
-	"strings"
 	"time"
 
 	"github.com/Songmu/timeout"
@@ -25,12 +23,6 @@ var (
 )
 
 var cmdBase = []string{"sh", "-c"}
-
-func init() {
-	if runtime.GOOS == "windows" {
-		cmdBase = []string{"cmd", "/U", "/c"}
-	}
-}
 
 // CommandOption carries a timeout duration.
 type CommandOption struct {
@@ -50,9 +42,6 @@ func RunCommandContext(ctx context.Context, command string, opt CommandOption) (
 	// does not work properly but depending on the writing way of the
 	// mackerel-agent.conf, the newlines may be contained at the end of
 	// the command string, so we trim it.
-	if runtime.GOOS == "windows" {
-		command = strings.TrimRight(command, "\r\n")
-	}
 	cmdArgs := append(cmdBase, command)
 	return RunCommandArgsContext(ctx, cmdArgs, opt)
 }
@@ -68,11 +57,7 @@ func RunCommandArgs(cmdArgs []string, opt CommandOption) (stdout, stderr string,
 func RunCommandArgsContext(ctx context.Context, cmdArgs []string, opt CommandOption) (stdout, stderr string, exitCode int, err error) {
 	args := append([]string{}, cmdArgs...)
 	if opt.User != "" {
-		if runtime.GOOS == "windows" {
-			logger.Warningf("RunCommand ignore option: user = %q", opt.User)
-		} else {
-			args = append([]string{"sudo", "-Eu", opt.User}, args...)
-		}
+		args = append([]string{"sudo", "-Eu", opt.User}, args...)
 	}
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Env = append(os.Environ(), opt.Env...)
@@ -92,7 +77,7 @@ func RunCommandArgsContext(ctx context.Context, cmdArgs []string, opt CommandOpt
 	stdout = decodeBytes(outbuf)
 	stderr = decodeBytes(errbuf)
 	exitCode = -1
-	if err == nil && exitStatus.IsTimedOut() && (runtime.GOOS == "windows" || exitStatus.Signaled) {
+	if err == nil && exitStatus.IsTimedOut() && exitStatus.Signaled {
 		err = errTimedOut
 		exitCode = exitStatus.GetChildExitCode()
 	}
