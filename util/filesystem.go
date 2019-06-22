@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -102,22 +101,6 @@ func parseDfLines(out string) []*DfStat {
 		// coreutils >= 8.15
 		if strings.HasPrefix(dfstat.Name, "/dev/dm-") && strings.Contains(dfstat.Mounted, "devicemapper/mnt") {
 			continue
-		}
-
-		if runtime.GOOS == "darwin" {
-			if strings.HasPrefix(dfstat.Mounted, "/Volumes/") {
-				continue
-			}
-			// Skip APFS vm partition, add its usage to the root filesystem.
-			if dfstat.Mounted == "/private/var/vm" {
-				for _, fs := range filesystems {
-					if fs.Mounted == "/" {
-						fs.Used += dfstat.Used
-						break
-					}
-				}
-				continue
-			}
 		}
 
 		filesystems = append(filesystems, dfstat)
