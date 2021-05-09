@@ -11,7 +11,7 @@ require (
 	github.com/Songmu/timeout v0.4.0
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
 	github.com/go-ole/go-ole v1.2.4 // indirect
-	github.com/mackerelio/go-osstat v0.1.0
+	github.com/mackerelio/go-osstat v0.2.0
 	github.com/mackerelio/golib v1.0.0
 	github.com/mackerelio/mackerel-client-go v0.12.0
 	github.com/mattn/go-encoding v0.0.2
@@ -23,6 +23,6 @@ require (
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/crypto v0.0.0-20200206161412-a0c6ece9d31a // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b
-	golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5
+	golang.org/x/sys v0.0.0-20210113181707-4bcb84eeeb78
 	golang.org/x/text v0.3.4
 )
